@@ -3,7 +3,10 @@ import pickle
 def load_movies():
     try:
         with open("movies.pickle", "rb") as file:
-            movies = pickle.load(file)
+            try:
+                movies = pickle.load(file)
+            except EOFError:
+                movies = []
         return movies
     except FileNotFoundError:
         movies = []
