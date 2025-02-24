@@ -12,7 +12,7 @@ import sys
 import os
 
 # Absoliutus pathas iki admin_menu failo (nuo pat disko) __file__ nurodo kelią iki failo ir nuiima paskutinį lygį. 
-#be os.path.dirname pathas gaunasi c:\Users\viliu\Desktop\CA_Filmu_festivalis\models\admin_menu.py
+#be os.path.dirname pathas gaunasi c:\..\..\Desktop\CA_Filmu_festivalis\models\admin_menu.py
 current_dir = os.path.dirname(os.path.abspath(__file__))
 print(current_dir)
 
@@ -188,6 +188,19 @@ def update_movie():
     print("Pasirinktas filmas:")
     print(repr(movie_to_update))
 
+
+     # Pakeičiama seno objekto reikšmė nauju objektu prieš keičiant atributą
+    for i, movie in enumerate(movie_list):
+            if (movie.name == movie_to_update.name and 
+                movie.length == movie_to_update.length and 
+                movie.genre == movie_to_update.genre and 
+                movie.director == movie_to_update.director and 
+                movie.release_year == movie_to_update.release_year and 
+                movie.age_rating == movie_to_update.age_rating):
+               
+                movie_list[i] = movie_to_update
+                break
+
     while True:
         attribute = input("Kurią informaciją norite atnaujinti?\nPavadinimas - [1]\nTrukmė - [2]\nŽanras - [3]\nRežisierius - [4]\nIšleidimo metai - [5]\nAmžiaus cenzas - [6]\n")
         
@@ -203,6 +216,7 @@ def update_movie():
                     break
                 except ValueError:
                     print("Neteisinga įvestis. Įveskite skaičių.")
+            break
         elif attribute == "3":
             new_value = input("Įveskite filmo žanrą: ")
             movie_to_update.genre = new_value
@@ -219,6 +233,7 @@ def update_movie():
                     break
                 except ValueError:
                     print("Neteisinga įvestis. Įveskite skaičių.")
+            break
         elif attribute == "6":
             while True:
                 try:
@@ -227,9 +242,11 @@ def update_movie():
                     break
                 except ValueError:
                     print("Neteisinga įvestis. Įveskite skaičių.")
+            break
         else:
             print("Neteisingas pasirinkimas, pasirinkite atributą iš sąrašo")
-
+            continue
+     
     file.save_movies(movie_list)
     print("Filmo informacija atnaujinta")
     print(repr(movie_to_update))
@@ -296,6 +313,8 @@ def exit():
     pass
 
 
-# # add_movie()
+# add_movie()
 # show_movie_list()
-update_movie()
+# update_movie()
+
+# remove_movie()
