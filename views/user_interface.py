@@ -1,7 +1,24 @@
 #čia bus cli jei gerai seksis ir gui
 import pickle
+
+
+import sys
+import os
+
+# Absoliutus pathas iki admin_menu failo (nuo pat disko) __file__ nurodo kelią iki failo ir nuiima paskutinį lygį. 
+#be os.path.dirname pathas gaunasi c:\..\..\Desktop\CA_Filmu_festivalis\models\admin_menu.py
+current_dir = os.path.dirname(os.path.abspath(__file__))
+print(current_dir)
+
+# pasiima vienu lygiu aukščiau esančią direktoriją (jau gaunasi root)
+project_root = os.path.dirname(current_dir)
+print(project_root)
+
+# prideda pathą iki root direktorijos, kad būtų galima paprasčiau importuoti kitus failus
+sys.path.append(project_root)
+
 import services.data_handler as files
-import models as mod
+import models.Functions as fun
 def authentication():
     print("Organizatoriaus prisijungimas - [1] | Svečio prisijungimas - [2] | Uždaryti programą - [Q]:")
     choice = input("")
@@ -47,39 +64,42 @@ def main_menu():
     authentication()
 
 def admin_menu():
-    choice = input("Pridėti filmą - [1]\n Pašalinti filmą - [2]\n Atnaujinti filmo informaciją - [3]\nRodyti repertuarą - [4]\nIeškoti filmo - [5]\nSeansai - [6]\nUždaryti programą - [Q]:")
+    choice = input("Rodyti filmų sąrašą - [1]\nPridėti filmą - [2]\n Pašalinti filmą - [3]\n Atnaujinti filmo informaciją - [4]\nPridėti filmą į repertuarą - [5]\nRodyti repertuarą - [6]\nIeškoti filmo - [7]\n Koreguoti repertuarą - [8]\nUždaryti programą - [Q]:")
     if choice == "1":
-        mod.add_movie() 
+        fun.show_movie_list()
     elif choice == "2":
-        pass
+        fun.add_movie() 
     elif choice == "3":
-        pass
+        fun.remove_movie()
     elif choice == "4":
-        pass
+        fun.update_movie()
     elif choice == "5":
-        pass
+        fun.add_movie_to_schedule
     elif choice == "6":
-        pass
+        fun.show_schedule()
+    elif choice == "7":
+        fun.search_movies()
+    elif choice == "8":
+        fun.edit_schedule()
     elif choice.lower() == "q":
-        print("Viso gero!")
-        exit()
+        fun.end_program()
     else:
         print("Neteisingas meniu pasirinkimas")    
 
 def client_menu():
     choice = input("Rodyti repertuarą - [1]\nFilmo paieška - [2]\nBilietų rezervacija - [3]\nFilmų reitingavimas - [4]")
     if choice == "1":
-        pass
+        fun.show_schedule()
     elif choice == "2":
-        pass
+        fun.search_movies()
     elif choice == "3":
         pass
     elif choice == "4":
         pass
     elif choice.lower() == "q":
-        print("Viso gero!")
-        exit()
-    print("Neteisingas meniu pasirinkimas")
+        fun.end_program()
+    else:
+        print("Neteisingas meniu pasirinkimas")
 
 
 

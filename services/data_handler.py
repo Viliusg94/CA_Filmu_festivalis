@@ -12,6 +12,10 @@ def load_movies():
         movies = []
         return movies
 
+def save_movies(movies):
+    with open("movies.pickle", "wb") as file:
+        pickle.dump(movies, file)
+
 def load_guests():
     try:
         with open("users.pickle", "rb") as file:
@@ -20,11 +24,20 @@ def load_guests():
     except FileNotFoundError:
         guests = []
         return guests
-
-def save_movies(movies):
-    with open("movies.pickle", "wb") as file:
-        pickle.dump(movies, file)
-
+    
 def save_guests(guests):
     with open("users.pickle", "wb") as file:
         pickle.dump(guests, file)
+
+
+def load_schedule():
+    try:
+        with open ("schedule.pickle", "rb") as file:
+            return pickle.load(file)
+    except FileNotFoundError:
+        schedule = []
+        return schedule
+
+def save_schedule(schedule):
+    with open("schedule.pickle", "wb") as file:
+        pickle.dump(schedule, file)
