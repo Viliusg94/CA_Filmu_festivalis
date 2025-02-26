@@ -17,7 +17,7 @@ sys.path.append(project_root)
 
 import services.schedule_handler as schedule
 import services.movie_handler as mov
-import models.functions as fun
+import models.Functions as fun
 from colorama import Fore, Back, Style
 def authentication():
     choice = input(Fore.GREEN + "[1] - Organizatoriaus prisijungimas\n[2] - Žiūrovo prisijungimas\n[3] - Žiūrovo registracija\n[Q] - Uždaryti programą\n" + Style.RESET_ALL)

@@ -1,5 +1,5 @@
 
-from colorama import init, Fore, Back, Style
+from colorama import init
 import views.user_interface as ui
 
 
