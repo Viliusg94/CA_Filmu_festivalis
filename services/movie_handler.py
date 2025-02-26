@@ -13,11 +13,11 @@ project_root = os.path.dirname(current_dir)
 # prideda pathą iki root direktorijos, kad būtų galima paprasčiau importuoti kitus failus
 sys.path.append(project_root)
 
-import modules.classes as cls
 import services.data_handler as file
 from datetime import datetime
 from colorama import Fore, Back, Style
-
+import modules.Movies as mov
+import services.data_handler as file
 
 def add_movie():
     add = True
@@ -60,12 +60,12 @@ def add_movie():
         
         if "dok" in genre.lower() or "doc" in genre.lower():
             subject = input(Fore.GREEN + "Įveskite dokumentikos temą: " + Style.RESET_ALL)
-            movie = cls.Documentarie(name,length,genre,director,release_year,age_rating,subject)
+            movie = mov.Documentarie(name,length,genre,director,release_year,age_rating,subject)
         elif "ani" in genre.lower():
             region = input(Fore.GREEN + "Įveskite regioną: " + Style.RESET_ALL)
-            movie = cls.Amimated_movie(name,length,genre,director,release_year,age_rating,region)
+            movie = mov.Amimated_movie(name,length,genre,director,release_year,age_rating,region)
         else:
-            movie = cls.Movie(name,length,genre,director,release_year,age_rating)
+            movie = mov.Movie(name,length,genre,director,release_year,age_rating)
 
         try:
             movies = file.load_movies()

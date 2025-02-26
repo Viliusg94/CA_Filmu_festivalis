@@ -12,12 +12,12 @@ project_root = os.path.dirname(current_dir)
 
 # prideda pathą iki root direktorijos, kad būtų galima paprasčiau importuoti kitus failus
 sys.path.append(project_root)
-
-import modules.classes as cls
+import modules.Schedule as sch
 import services.data_handler as file
 from datetime import datetime, timedelta
 import services.movie_handler as mov
 from colorama import Fore, Back, Style
+import services.data_handler as file
 
 def add_movie_to_schedule():
     try:
@@ -73,7 +73,7 @@ def add_movie_to_schedule():
         except ValueError:
             print(Back.RED +"Neteisingas laiko formatas, įveskite laiką formatu HH:MM"+ Style.RESET_ALL)
 
-    screening_entry = cls.Schedule(movie_to_schedule, f_screening_date, f_screening_time)
+    screening_entry = sch.Schedule(movie_to_schedule, f_screening_date, f_screening_time)
     screening_list = file.load_schedule()
 
     for movie in screening_list:

@@ -13,7 +13,7 @@ project_root = os.path.dirname(current_dir)
 # prideda pathą iki root direktorijos, kad būtų galima paprasčiau importuoti kitus failus
 sys.path.append(project_root)
 
-import modules.classes as cls
+import modules.Guest as gue
 import services.data_handler as file
 from colorama import Fore, Back, Style
 # ###########################################################################################################################################################################
@@ -759,7 +759,7 @@ def guest_registration():
                 print(Back.RED + "Toks žiūrovas jau užregistruotas" + Style.RESET_ALL)
                 break
         else:
-            new_guest = cls.Guest(guest_name)
+            new_guest = gue.Guest(guest_name)
             guests.append(new_guest)
             file.save_guests(guests)
             print(Fore.YELLOW + f"Žiūrovas {guest_name} užregistruotas į festivalį!" + Style.RESET_ALL)
