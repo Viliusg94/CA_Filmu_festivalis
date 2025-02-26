@@ -19,7 +19,8 @@ import services.schedule_handler as schedule
 import services.movie_handler as mov
 import models.Functions as fun
 from colorama import Fore, Back, Style
-from views import admin_menu as adm
+from views import admin_menu as admin
+
 def authentication():
     choice = input(Fore.GREEN + "[1] - Organizatoriaus prisijungimas\n[2] - Žiūrovo prisijungimas\n[3] - Žiūrovo registracija\n[Q] - Uždaryti programą\n" + Style.RESET_ALL)
 
@@ -30,7 +31,7 @@ def authentication():
             user_password = input("Slaptažodis: ").strip()
             if user_name.lower() == "admin" and user_password.lower() == "admin": 
                 print(Fore.YELLOW + "Prisijungimas sėkmingas!" + Style.RESET_ALL)
-                adm.admin_menu()  
+                admin.admin_menu()  
             else:
                 print (Back.RED + "Neteisingas vartotojo vardas arba slaptažodis, bandykite dar kartą" + Style.RESET_ALL)
                    

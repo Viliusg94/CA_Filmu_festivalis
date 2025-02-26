@@ -343,7 +343,7 @@ def rate_movie(guest_name):
         movie_name = reservation["Filmo pavadinimas"]
         screening_date = reservation["Seanso data"]
 
-        if screening_date < datetime.now().date():
+        if screening_date < datetime.date():
             for movie in movies:
                 if movie.name == movie_name and movie not in seen_movies:
                     seen_movies.append(movie)
