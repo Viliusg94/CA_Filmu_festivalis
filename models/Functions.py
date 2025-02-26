@@ -15,8 +15,7 @@ sys.path.append(project_root)
 
 import modules.classes as cls
 import services.data_handler as file
-from datetime import datetime, timedelta
-
+from colorama import Fore, Back, Style
 # ###########################################################################################################################################################################
 # def add_movie():
 #     add = True
@@ -743,27 +742,27 @@ from datetime import datetime, timedelta
 
 ############################################################################################################################################################################
 def guest_registration():
-    print("Žiūrovų registracija")
+    print(Fore.MAGENTA + "Žiūrovų registracija" + Style.RESET_ALL)
     try:
         guests = file.load_guests()
     except FileNotFoundError:
         guests = []
 
     while True:
-        guest_name = input("Įveskite savo vardą: ").strip()
+        guest_name = input(Fore.GREEN + "Įveskite savo vardą: " + Style.RESET_ALL).strip()
         if guest_name == "":
-            print("Vardas negali būti tuščias, įveskite savo vardą")
+            print(Back.RED + "Vardas negali būti tuščias, įveskite savo vardą" + Style.RESET_ALL)
             continue
 
         for guest in guests:
             if guest_name.lower() == guest.name.lower():
-                print("Toks žiūrovas jau užregistruotas")
+                print(Back.RED + "Toks žiūrovas jau užregistruotas" + Style.RESET_ALL)
                 break
         else:
             new_guest = cls.Guest(guest_name)
             guests.append(new_guest)
             file.save_guests(guests)
-            print(f"Žiūrovas {guest_name} užregistruotas į festivalį!")
+            print(Fore.YELLOW + f"Žiūrovas {guest_name} užregistruotas į festivalį!" + Style.RESET_ALL)
             break
 ############################################################################################################################################################################
 def guest_login():
@@ -773,13 +772,13 @@ def guest_login():
         guests = []
 
     if guests == []:
-        print("Neužregistruotas nei vienas žiūrovas")
+        print(Back.RED + "Neužregistruotas nei vienas žiūrovas" + Style.RESET_ALL)
         return None
 
     while True:        
-        guest_name = input("Įveskite savo vardą: ").strip()
+        guest_name = input(Fore.GREEN + "Įveskite savo vardą: " + Style.RESET_ALL).strip()
         if guest_name == "":
-            print("Vardas negali būti tuščias")
+            print(Back.RED + "Vardas negali būti tuščias" + Style.RESET_ALL)
             continue
 
         guest_exists = False
@@ -789,25 +788,12 @@ def guest_login():
                 break
 
         if guest_exists:
-            print(f"Sveiki, {str(guest_name).title()}!")
+            print(Fore.MAGENTA + f"Sveiki, {str(guest_name).title()}!" + Style.RESET_ALL)
             return (guest_name)
         else: 
-            print(f"Žiūrovas {guest_name} nėra registruotas, prašome užsiregistruoti")
+            print(Back.RED + f"Žiūrovas {guest_name} nėra registruotas, prašome užsiregistruoti" + Style.RESET_ALL)
             return None
 ############################################################################################################################################################################
 def end_program():
-    print("Viso gero!")
+    print(Fore.LIGHTRED_EX + Style.BRIGHT + "Viso gero!" + Style.RESET_ALL)
     exit()
-
-
-
-
-
-# add_movie()
-# show_movie_list()
-# update_movie()
-# remove_movie()
-# add_movie_to_schedule()
-# show_schedule()
-# edit_schedule()
-# guest_registration() 

@@ -16,23 +16,24 @@ sys.path.append(project_root)
 import modules.classes as cls
 import services.data_handler as file
 from datetime import datetime
+from colorama import Fore, Back, Style
 
 
 def add_movie():
     add = True
     while add:
-        name = input("Įveskite filmo pavadinimą: ")
+        name = input(Fore.GREEN + "Įveskite filmo pavadinimą: " + Style.RESET_ALL)
         try:
             while True:
-                length = int(input("Įveskite filmo trukmę (minutės): "))
+                length = int(input(Fore.GREEN + "Įveskite filmo trukmę (minutės): " + Style.RESET_ALL))
                 break
         except ValueError:
-            print("Neteisinga įvestis, įveskite filmo trukmę (minutėmis)")
-        genre = input("Filmo žanras: ")
-        director = input("Režisierius: ")
+            print(Back.RED + "Neteisinga įvestis, įveskite filmo trukmę (minutėmis)" + Style.RESET_ALL)
+        genre = input(Fore.GREEN + "Filmo žanras: " + Style.RESET_ALL)
+        director = input(Fore.GREEN + "Režisierius: " + Style.RESET_ALL)
 
         while True:
-            release_year = (input("Išleidimo metai YYYY: "))
+            release_year = (input(Fore.GREEN + "Išleidimo metai YYYY: " + Style.RESET_ALL))
             check_year = len(release_year)
             if check_year == 4:
                 try:
@@ -41,25 +42,25 @@ def add_movie():
                         release_year = year
                         break
                     else:
-                        print("Nekorektiškai įvesti filmo išleidimo metai")
+                        print(Back.YELLOW + "Nekorektiškai įvesti filmo išleidimo metai" + Style.RESET_ALL)
                 except ValueError:
-                    print("Nekorektiškai įvesti duomenys. Išleidimo metai privalo būti sveikas skaičius (YYYY)")        
+                    print(Back.YELLOW + "Nekorektiškai įvesti duomenys. Išleidimo metai privalo būti sveikas skaičius (YYYY)" + Style.RESET_ALL)        
             else:
-                print("Nekorektiškai įvesti filmo išleidimo metai")
+                print(Back.RED + "Nekorektiškai įvesti filmo išleidimo metai" + Style.RESET_ALL)
 
         while True:
             try:
-                age_rating = int(input("Rekomenduojamas amžius: "))
+                age_rating = int(input(Fore.GREEN + "Rekomenduojamas amžius: " + Style.RESET_ALL))
                 break
             except ValueError:
                 print("Neteisinga įvestis, įveskite amžiaus reitingą skaičiais.")
     
         
         if "dok" in genre.lower() or "doc" in genre.lower():
-            subject = input("Įveskite dokumentikos temą: ")
+            subject = input(Fore.GREEN + "Įveskite dokumentikos temą: " + Style.RESET_ALL)
             movie = cls.Documentarie(name,length,genre,director,release_year,age_rating,subject)
         elif "ani" in genre.lower():
-            region = input("Įveskite regioną: ")
+            region = input(Fore.GREEN + "Įveskite regioną: " + Style.RESET_ALL)
             movie = cls.Amimated_movie(name,length,genre,director,release_year,age_rating,region)
         else:
             movie = cls.Movie(name,length,genre,director,release_year,age_rating)
@@ -79,7 +80,7 @@ def add_movie():
 
         check = True
         while check:
-            option = input("Ar norite tęsti Taip/Ne? ")
+            option = input(Fore.YELLOW + "Ar norite tęsti Taip/Ne? " + Style.RESET_ALL)
             if option.lower() == "taip":
                 add = True
                 break
@@ -87,7 +88,7 @@ def add_movie():
                 add = False                
                 break
             else:
-                print("Ar norite tęsti? Taip/Ne")
+                print(Fore.YELLOW + "Ar norite tęsti? Taip/Ne" + Style.RESET_ALL)
 
 ############################################################################################################################################################################
 def remove_movie():
@@ -98,11 +99,11 @@ def remove_movie():
             except FileNotFoundError:
                 movie_list = []
             if movie_list == []:
-                print("Filmų sąrašas tuščias")
+                print(Back.RED + "Filmų sąrašas tuščias" + Style.RESET_ALL)
                 remove = False
                 break
 
-            search_text = input("Įveskite norimo pašalinti filmo pavadinimą: ").lower()
+            search_text = input(Fore.GREEN + "Įveskite norimo pašalinti filmo pavadinimą: " + Style.RESET_ALL).lower()
             found_movies = []
 
             for movie in movie_list:
@@ -110,34 +111,34 @@ def remove_movie():
                     found_movies.append(movie)
 
             if found_movies == []:
-                print(f"Nerastas nei vienas filmas tokiu pavadinimu: {search_text}")
+                print(Fore.YELLOW + f"Nerastas nei vienas filmas tokiu pavadinimu: {search_text}" + Style.RESET_ALL)
                 break
 
             elif len(found_movies) == 1:
                 movie_list.remove(found_movies[0])
                 file.save_movies(movie_list)
-                print(f"Filmas '{found_movies[0].name}' sėkmingai pašalintas iš sąrašo")
+                print(Fore.CYAN + f"Filmas '{found_movies[0].name}' sėkmingai pašalintas iš sąrašo" + Style.RESET_ALL)
                 return
             
             if len(found_movies) > 1:
-                print(f"Rastas ne vienas filmas tokiu pat pavadinimu: {search_text}.\n Pasirinkit filmą kurį norite pašalinti:")
+                print(Fore.YELLOW + f"Rastas ne vienas filmas tokiu pat pavadinimu: {search_text}.\n Pasirinkit filmą kurį norite pašalinti:" + Style.RESET_ALL)
                 for i, movie in enumerate(found_movies):
                     print(f"[{i+1}] {repr(movie)}")
                 while True:
                     try:
-                        choice = int(input("Pasirinkite norimo ištrinti filmo numerį: "))
+                        choice = int(input(Fore.GREEN + "Pasirinkite norimo ištrinti filmo numerį: " + Style.RESET_ALL))
                         if 1 <= choice <= len(found_movies):
                             movie_to_remove = found_movies[choice - 1]
                             break
                         else:
-                            print("Neteisingai pasirinktas filmas, pasirinkite filmo numerį iš sąrašo.")
+                            print(Fore.YELLOW + "Neteisingai pasirinktas filmas, pasirinkite filmo numerį iš sąrašo." + Style.RESET_ALL)
                     except ValueError:
-                        print("Neteisinga įvestis.")
+                        print(Back.RED + "Neteisinga įvestis." + Style.RESET_ALL) 
 
             movie_list.remove(movie_to_remove)
             file.save_movies(movie_list)
 
-            print("Filmas sėkmingai pašalintas iš sąrašo")
+            print(Fore.CYAN + "Filmas sėkmingai pašalintas iš sąrašo" + Style.RESET_ALL)
             
             ##Testavimui
             # check = True
@@ -160,34 +161,34 @@ def update_movie():
     except FileNotFoundError:
         movie_list = []
     if movie_list == []:
-        print("Filmų sąrašas tuščias")
+        print(Back.RED + "Filmų sąrašas tuščias" + Style.RESET_ALL)
         return 
 
     show_movie_list()
     results = search_movies()
     if results == []:
-        print("Nerastas nei vienas filmas pagal paieškos kriterijus")
+        print(Back.RED + "Nerastas nei vienas filmas pagal paieškos kriterijus" + Style.RESET_ALL)
         return
 
     if len(results) > 1:
-        print("Yra daugiau nei vienas filmas tokiu pavadinimu. pasirinkite, kurį filmą norite atnaujinti")
+        print(Fore.YELLOW + "Yra daugiau nei vienas filmas tokiu pavadinimu. pasirinkite, kurį filmą norite atnaujinti" + Style.RESET_ALL)
         for i, movie in enumerate(results):
             print(f"[{i+1}] {repr(movie)}")
 
         while True:
             try:
-                choice = int(input("Įveskite filmo numerį, kurį norite atnaujinti: "))
+                choice = int(input(Fore.GREEN + "Įveskite filmo numerį, kurį norite atnaujinti: " + Style.RESET_ALL))
                 if 1 <= choice <= len(results):
                     movie_to_update = results[choice - 1]
                     break
                 else:
-                    print("Neteisingas pasirinkimas. Įveskite filmo numerį iš sąrašo.")
+                    print(Fore.YELLOW + "Neteisingas pasirinkimas. Įveskite filmo numerį iš sąrašo." + Style.RESET_ALL)
             except ValueError:
-                print("Neteisinga įvestis, įveskite skaičių")
+                print(Back.RED + "Neteisinga įvestis, įveskite skaičių" + Style.RESET_ALL)
     else:
         movie_to_update = results[0]                    
 
-    print("Pasirinktas filmas:")
+    print(Fore.MAGENTA + "Pasirinktas filmas:" + Style.RESET_ALL)
     print(repr(movie_to_update))
 
 
@@ -204,53 +205,53 @@ def update_movie():
                 break
 
     while True:
-        attribute = input("Kurią informaciją norite atnaujinti?\nPavadinimas - [1]\nTrukmė - [2]\nŽanras - [3]\nRežisierius - [4]\nIšleidimo metai - [5]\nAmžiaus cenzas - [6]\n")
+        attribute = input(Fore.GREEN + "Kurią informaciją norite atnaujinti?\nPavadinimas - [1]\nTrukmė - [2]\nŽanras - [3]\nRežisierius - [4]\nIšleidimo metai - [5]\nAmžiaus cenzas - [6]\n" + Style.RESET_ALL)
         
         if attribute == "1":
-            new_value = input("Įveskite naują pavadinimą: ")
+            new_value = input(Fore.GREEN + "Įveskite naują pavadinimą: " + Style.RESET_ALL)
             movie_to_update.name = new_value
             break
         elif attribute == "2":
             while True:
                 try:
-                    new_value = int(input("Įveskite filmo trukmę (minutėmis): "))
+                    new_value = int(input(Fore.GREEN + "Įveskite filmo trukmę (minutėmis): "+ Style.RESET_ALL))
                     movie_to_update.length = new_value
                     break
                 except ValueError:
-                    print("Neteisinga įvestis. Įveskite skaičių.")
+                    print(Back.RED + "Neteisinga įvestis. Įveskite skaičių."+ Style.RESET_ALL)
             break
         elif attribute == "3":
-            new_value = input("Įveskite filmo žanrą: ")
+            new_value = input(Fore.GREEN + "Įveskite filmo žanrą: "+ Style.RESET_ALL)
             movie_to_update.genre = new_value
             break
         elif attribute == "4":
-            new_value = input("Įveskite filmo režisierių: ")
+            new_value = input(Fore.GREEN + "Įveskite filmo režisierių: "+ Style.RESET_ALL)
             movie_to_update.director = new_value
             break
         elif attribute == "5":
             while True:
                 try:
-                    new_value = int(input("Įveskite filmo išleidimo metus: "))
+                    new_value = int(input(Fore.GREEN + "Įveskite filmo išleidimo metus: "+ Style.RESET_ALL))
                     movie_to_update.release_year = new_value
                     break
                 except ValueError:
-                    print("Neteisinga įvestis. Įveskite skaičių.")
+                    print(Back.RED + "Neteisinga įvestis. Įveskite skaičių."+ Style.RESET_ALL)
             break
         elif attribute == "6":
             while True:
                 try:
-                    new_value = int(input("Įveskite naują amžiaus cenzą: "))
+                    new_value = int(input(Fore.GREEN + "Įveskite naują amžiaus cenzą: "+ Style.RESET_ALL))
                     movie_to_update.age_rating = new_value
                     break
                 except ValueError:
-                    print("Neteisinga įvestis. Įveskite skaičių.")
+                    print(Back.RED + "Neteisinga įvestis. Įveskite skaičių."+ Style.RESET_ALL)
             break
         else:
-            print("Neteisingas pasirinkimas, pasirinkite atributą iš sąrašo")
+            print(Fore.YELLOW + "Neteisingas pasirinkimas, pasirinkite atributą iš sąrašo"+ Style.RESET_ALL)
             continue
    
     file.save_movies(movie_list)
-    print("Filmo informacija atnaujinta")
+    print(Fore.CYAN + "Filmo informacija atnaujinta"+ Style.RESET_ALL)
     print(repr(movie_to_update))
 ############################################################################################################################################################################
 def show_movie_list():
@@ -269,12 +270,12 @@ def search_movies():
     except FileNotFoundError:
         movie_list = []
     if movie_list == []:
-        print("Filmų sąrašas tuščias")
+        print(Back.RED + "Filmų sąrašas tuščias" + Style.RESET_ALL)
         return movie_list
         
     
-    criteria = input("Paieškos kriterijus:\n[1] - Pavadinimas\n[2] - Žanras\n[3] - Režisierius\n[4] - Išleidimo metai\n[5] - Amžiaus cenzas\n")
-    search_text = input("Paieškos tekstas: ").lower()
+    criteria = input(Fore.GREEN + "Paieškos kriterijus:\n[1] - Pavadinimas\n[2] - Žanras\n[3] - Režisierius\n[4] - Išleidimo metai\n[5] - Amžiaus cenzas\n" + Style.RESET_ALL)
+    search_text = input(Fore.YELLOW + "Paieškos tekstas: " + Style.RESET_ALL).lower()
 
     results = []
     for movie in movie_list:
@@ -292,28 +293,28 @@ def search_movies():
                 if int(search_text) == movie.release_year:
                     results.append(movie)
             except ValueError:
-                print("Neteisinga įvestis. Išleidimo metai turi būti skaičius.")
+                print(Fore.YELLOW + "Neteisinga įvestis. Išleidimo metai turi būti skaičius." + Style.RESET_ALL)  
         elif criteria == "5":
             try:
                 if int(search_text) == movie.age_rating:
                     results.append(movie)
             except ValueError:
-                print("Neteisinga įvestis. Amžiaus cenzas turi būti skaičius.")
+                print(Back.RED + "Neteisinga įvestis. Amžiaus cenzas turi būti skaičius." + Style.RESET_ALL) 
         else:
-            print("Neteisingai pasirinktas paieškos kriterijus")
+            print(Back.RED + "Neteisingai pasirinktas paieškos kriterijus" + + Style.RESET_ALL)
 
     if results != []:
-        print("Paieškos rezultatai:")
+        print(Fore.CYAN + "Paieškos rezultatai:" + Style.RESET_ALL)
         for movie in results:
             print(repr(movie))
     else:
-        print("Pagal pateiktus paieškos kriterijus filmų nėra")                         
+        print(Fore.YELLOW + "Pagal pateiktus paieškos kriterijus filmų nėra" + Style.RESET_ALL)                         
 
     return results
 
 ############################################################################################################################################################################
 def rate_movie(guest_name):
-    print("Įvertinkite filmą")
+    print(Fore.MAGENTA + "Įvertinkite filmą" + Style.RESET_ALL)
 
     try:
         movies = file.load_movies()
@@ -342,10 +343,10 @@ def rate_movie(guest_name):
                     seen_movies.append(movie)
 
     if seen_movies == []:
-        print("Neturite peržiūrėtų filmų, kuriuos galėtumėte vertinti")
+        print(Fore.YELLOW + "Neturite peržiūrėtų filmų, kuriuos galėtumėte vertinti" + Style.RESET_ALL)
         return
 
-    print("Jūsų peržiūrėti filmai:")
+    print(Fore.MAGENTA + "Jūsų peržiūrėti filmai:" + Style.RESET_ALL)
     for i, movie in enumerate (seen_movies,1):
         current_score = None
         for score in movie.score_list:
@@ -355,29 +356,29 @@ def rate_movie(guest_name):
 
     while True:
         try:
-            choice = int(input("Pasirinkite vertinamo filmo numerį\n"))
+            choice = int(input(Fore.GREEN + "Pasirinkite vertinamo filmo numerį\n" + Style.RESET_ALL))
             if 1 <= choice <= len(seen_movies):
                 selected_movie = seen_movies[choice -1]
                 break
             else:
-                print("Pasirinkite filmą iš sąrašo\n")
+                print(Fore.YELLOW + "Pasirinkite filmą iš sąrašo\n" + Style.RESET_ALL)
         except ValueError:
-            print("Neteisinga įvestis, įveskite skaičių\n")
+            print(Back.RED + "Neteisinga įvestis, įveskite skaičių\n" + Style.RESET_ALL)
 
     while True:
         try:
-            score = int(input("Įvertinkite filmą nuo 1 iki 10\n"))
+            score = int(input(Fore.GREEN + "Įvertinkite filmą nuo 1 iki 10\n" + Style.RESET_ALL))
             if 1 <= score <= 10:
                 break
             else:
-                print("Įvertinimas turi būti tarp 1 ir 10\n")
+                print(Fore.YELLOW + "Įvertinimas turi būti tarp 1 ir 10\n" +Style.RESET_ALL)
         except ValueError:
-            print("Netinkama įvestis, įvertinimas privalo būti skaičius\n")
+            print(Back.RED + "Netinkama įvestis, įvertinimas privalo būti skaičius\n" + Style.RESET_ALL)
 
     selected_movie.add_score(guest_name, score)
 
     file.save_movies(movies)
-    print(f"{selected_movie.name} įvertinote {score}")
+    print(Fore.CYAN + f"{selected_movie.name} įvertinote {score}" + Style.RESET_ALL)
 ############################################################################################################################################################################
 def show_guest_ratings(guest_name):
     try:
@@ -399,9 +400,9 @@ def show_guest_ratings(guest_name):
                 })
 
     if rated_movies == []:
-        print("Jūs dar neįvertinote nei vieno filmo")
+        print(Fore.YELLOW + "Jūs dar neįvertinote nei vieno filmo" + Style.RESET_ALL)
         return
     
-    print("Jūsų įvertinti filmai: ")
+    print(Fore.MAGENTA + "Jūsų įvertinti filmai: " + Style.RESET_ALL)
     for i, movie in enumerate(rated_movies,1):
         print(f"[{i}] {movie['Filmo pavadinimas']} Jūsų įvertinimas: {movie['Balas']} Filmo įvertinimų vidurkis: {movie['Vidurkis']:.1f}/10")
