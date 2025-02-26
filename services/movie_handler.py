@@ -102,7 +102,7 @@ def remove_movie():
                 print(Back.RED + "Filmų sąrašas tuščias" + Style.RESET_ALL)
                 remove = False
                 break
-
+            show_movie_list()
             search_text = input(Fore.GREEN + "Įveskite norimo pašalinti filmo pavadinimą: " + Style.RESET_ALL).lower()
             found_movies = []
 
