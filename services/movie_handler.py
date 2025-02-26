@@ -22,7 +22,9 @@ from colorama import Fore, Back, Style
 def add_movie():
     add = True
     while add:
-        name = input(Fore.GREEN + "Įveskite filmo pavadinimą: " + Style.RESET_ALL)
+        name = input(Fore.GREEN + "Įveskite filmo pavadinimą\n[Q] - grįžti\n" + Style.RESET_ALL)
+        if name.lower() == "q":
+            return
         try:
             while True:
                 length = int(input(Fore.GREEN + "Įveskite filmo trukmę (minutės): " + Style.RESET_ALL))
@@ -77,7 +79,6 @@ def add_movie():
 
         file.save_movies(movies)
 
-
         check = True
         while check:
             option = input(Fore.YELLOW + "Ar norite tęsti Taip/Ne? " + Style.RESET_ALL)
@@ -103,7 +104,9 @@ def remove_movie():
                 remove = False
                 break
             show_movie_list()
-            search_text = input(Fore.GREEN + "Įveskite norimo pašalinti filmo pavadinimą: " + Style.RESET_ALL).lower()
+            search_text = input(Fore.GREEN + "Įveskite norimo pašalinti filmo pavadinimą:\n[Q] - Grįžti\n " + Style.RESET_ALL).lower()
+            if search_text.lower() == "q":
+                return
             found_movies = []
 
             for movie in movie_list:
@@ -205,8 +208,9 @@ def update_movie():
                 break
 
     while True:
-        attribute = input(Fore.GREEN + "Kurią informaciją norite atnaujinti?\nPavadinimas - [1]\nTrukmė - [2]\nŽanras - [3]\nRežisierius - [4]\nIšleidimo metai - [5]\nAmžiaus cenzas - [6]\n" + Style.RESET_ALL)
-        
+        attribute = input(Fore.GREEN + "Kurią informaciją norite atnaujinti?\nPavadinimas - [1]\nTrukmė - [2]\nŽanras - [3]\nRežisierius - [4]\nIšleidimo metai - [5]\nAmžiaus cenzas - [6]\n[Q] - Grįžti\n" + Style.RESET_ALL)
+        if attribute.lower() == "q":
+                return
         if attribute == "1":
             new_value = input(Fore.GREEN + "Įveskite naują pavadinimą: " + Style.RESET_ALL)
             movie_to_update.name = new_value
@@ -274,7 +278,9 @@ def search_movies():
         return movie_list
         
     
-    criteria = input(Fore.GREEN + "Paieškos kriterijus:\n[1] - Pavadinimas\n[2] - Žanras\n[3] - Režisierius\n[4] - Išleidimo metai\n[5] - Amžiaus cenzas\n" + Style.RESET_ALL)
+    criteria = input(Fore.GREEN + "Paieškos kriterijus:\n[1] - Pavadinimas\n[2] - Žanras\n[3] - Režisierius\n[4] - Išleidimo metai\n[5] - Amžiaus cenzas\n[Q] - Grįžti\n" + Style.RESET_ALL)
+    if criteria.lower() == "q":
+        return
     search_text = input(Fore.YELLOW + "Paieškos tekstas: " + Style.RESET_ALL).lower()
 
     results = []

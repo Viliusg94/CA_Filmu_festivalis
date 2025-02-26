@@ -53,9 +53,6 @@ class Schedule:
     def __repr__(self):
         return (f"Filmų tvarkaraštis:\n{self.movie.name}, Data - {self.screening_date}, Laikas - {self.screening_time}, Laisvos vietos {self.available_seats}")
 
-class Admin:
-        pass
-
 class Guest:
     def __init__(self, name):
         self.name = name

@@ -42,7 +42,7 @@ def add_movie_to_schedule():
 
         while True:
             try:
-                choice = int(input(Fore.YELLOW + "Įveskite filmo numerį: " + Style.RESET_ALL))
+                choice = int(input(Fore.YELLOW + "Įveskite filmo numerį:" + Style.RESET_ALL))
                 if 1 <= choice <= len(results):
                     movie_to_schedule = results[choice -1]
                     break
@@ -139,8 +139,9 @@ def edit_schedule():
     action_choice = input(Fore.GREEN + "Pasirinkite veiksmą:\n[1] - Redaguoti seansą\n[2] - Pašalinti seansą\n" + Style.RESET_ALL)
 
     if action_choice == "1":#Atnaujinti
-        edit = input(Fore.GREEN + "Ką norite pakeisti?\n[1] - Datą\n[2] - Laiką\n[3] - Rodomą filmą\n" + Style.RESET_ALL)
-
+        edit = input(Fore.GREEN + "Ką norite pakeisti?\n[1] - Datą\n[2] - Laiką\n[3] - Rodomą filmą\n[Q] - Grįžti\n" + Style.RESET_ALL)
+        if edit.lower() == "q":
+            return
         if edit == "1": #data
             while True:
                 try:

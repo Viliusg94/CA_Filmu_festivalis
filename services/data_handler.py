@@ -1,7 +1,8 @@
 import pickle
 import os
 
-
+# Absoliutus pathas iki admin_menu failo (nuo pat disko) __file__ nurodo kelią iki failo ir nuiima paskutinį lygį. 
+#be os.path.dirname pathas gaunasi c:\..\..\Desktop\CA_Filmu_festivalis\services\movie_handler.py
 data_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data')
 os.makedirs(data_dir, exist_ok=True)
 
