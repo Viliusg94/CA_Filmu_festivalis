@@ -1,13 +1,3 @@
-# Reikalavimai:
-#     • Galimybė pridėti naują filmą į festivalio programą.
-#     • Kiekvienas filmas turi turėti šiuos atributus (gali turėti ir daugiau):
-#         ◦ Pavadinimas
-#         ◦ Trukmė (minutėmis)
-#         ◦ Žanras (drama, komedija ir t.t.)
-#         ◦ Režisierius
-#         ◦ Išleidimo metai
-#         ◦ Amžiaus reitingas (pvz., "N-13", "N-18")
-
 import sys
 import os
 ############################################################################################################################################################################
@@ -65,13 +55,12 @@ def add_movie():
                 print("Neteisinga įvestis, įveskite amžiaus reitingą skaičiais.")
     
         
-        if "ani" in genre.lower(): #tikrina ar tai animacija/animacinis/anime
-            region = input("Įveskite regioną: ")
-            movie = cls.Amimated_movie(name,length,genre,director,release_year,age_rating,region)
-
-        elif "dok" in genre.lower() or "doc" in genre.lower():
+        if "dok" in genre.lower() or "doc" in genre.lower():
             subject = input("Įveskite dokumentikos temą: ")
             movie = cls.Documentarie(name,length,genre,director,release_year,age_rating,subject)
+        elif "ani" in genre.lower():
+            region = input("Įveskite regioną: ")
+            movie = cls.Amimated_movie(name,length,genre,director,release_year,age_rating,region)
         else:
             movie = cls.Movie(name,length,genre,director,release_year,age_rating)
 
@@ -115,46 +104,53 @@ def remove_movie():
 
             search_text = input("Įveskite norimo pašalinti filmo pavadinimą: ").lower()
             found_movies = []
+
             for movie in movie_list:
                 if search_text in movie.name.lower():
                     found_movies.append(movie)
 
-            if not found_movies:
+            if found_movies == []:
                 print(f"Nerastas nei vienas filmas tokiu pavadinimu: {search_text}")
                 break
 
+            elif len(found_movies) == 1:
+                movie_list.remove(found_movies[0])
+                file.save_movies(movie_list)
+                print(f"Filmas '{found_movies[0].name}' sėkmingai pašalintas iš sąrašo")
+                return
+            
             if len(found_movies) > 1:
                 print(f"Rastas ne vienas filmas tokiu pat pavadinimu: {search_text}.\n Pasirinkit filmą kurį norite pašalinti:")
                 for i, movie in enumerate(found_movies):
                     print(f"[{i+1}] {repr(movie)}")
-
-            while True:
-                try:
-                    choice = int(input("Pasirinkite norimo ištrinti filmo numerį: "))
-                    if 1 <= choice <= len(found_movies):
-                        movie_to_remove = found_movies[choice - 1]
-                        break
-                    else:
-                        print("Neteisingai pasirinktas filmas, pasirinkite filmo numerį iš sąrašo.")
-                except ValueError:
-                    print("Neteisinga įvestis.")
+                while True:
+                    try:
+                        choice = int(input("Pasirinkite norimo ištrinti filmo numerį: "))
+                        if 1 <= choice <= len(found_movies):
+                            movie_to_remove = found_movies[choice - 1]
+                            break
+                        else:
+                            print("Neteisingai pasirinktas filmas, pasirinkite filmo numerį iš sąrašo.")
+                    except ValueError:
+                        print("Neteisinga įvestis.")
 
             movie_list.remove(movie_to_remove)
             file.save_movies(movie_list)
 
             print("Filmas sėkmingai pašalintas iš sąrašo")
-
-            check = True
-            while check:
-                option = input("Ar norite tęsti Taip/Ne? ")
-                if option.lower() == "taip":
-                    remove = True
-                    break
-                elif option.lower() == "ne":
-                    remove = False                
-                    break
-            else:
-                print("Ar norite tęsti? Taip/Ne")
+            
+            ##Testavimui
+            # check = True
+            # while check:
+            #     option = input("Ar norite tęsti Taip/Ne? ")
+            #     if option.lower() == "taip":
+            #         remove = True
+            #         break
+            #     elif option.lower() == "ne":
+            #         remove = False                
+            #         break
+            # else:
+            #     print("Ar norite tęsti? Taip/Ne")
 
             
 ############################################################################################################################################################################
@@ -195,7 +191,7 @@ def update_movie():
     print(repr(movie_to_update))
 
 
-     # Pakeičiama seno objekto reikšmė nauju objektu prieš keičiant atributą
+    # Pakeičiama seno objekto reikšmė nauju objektu prieš keičiant atributą
     for i, movie in enumerate(movie_list):
             if (movie.name == movie_to_update.name and 
                 movie.length == movie_to_update.length and 
@@ -373,7 +369,7 @@ def add_movie_to_schedule():
     screening_list = file.load_schedule()
 
     for movie in screening_list:
-        #tikrinta tos pačios dienos filmus ir sukonvertuoja į palyginamą formatą
+        #tikrinta tos pačios dienos filmus ir sukonvertuoja į datetime objektus palyginimui
         if movie.screening_date == f_screening_date:
             existing_time = datetime.combine(f_screening_date, movie.screening_time) #nauja data + ezistuojančio seanso laikas
             new_time = datetime.combine(f_screening_date, f_screening_time) #nauja data + editintas laikas
@@ -448,11 +444,12 @@ def edit_schedule():
 
                     overlap = False
                     for movie in screening_list: 
+                        # 2. Tikrina ar tai ne tas pats seansas kurį koreguojame IR ar ta pati data
                         if movie != entry_to_edit and movie.screening_date == f_edit_date:
-                            existing_time = datetime.combine(f_edit_date, movie.screening_time) #senas laikas
-                            new_time = datetime.combine(f_edit_date,entry_to_edit.screening_time) #data į kurią keičiama 
+                            existing_time = datetime.combine(f_edit_date, movie.screening_time) #Dabartinis seanso laikas
+                            new_time = datetime.combine(f_edit_date,entry_to_edit.screening_time) #Naujas seanso laikas
                             movie_duration = timedelta(minutes=entry_to_edit.movie.length) # Filmo trukmė
-
+                        #Tikrina ar seansų laikas nesidubliuoja
                             if (existing_time <= f_edit_date < existing_time + timedelta(minutes=movie.movie.length) or new_time <= existing_time < new_time + movie_duration):
                                 print (f"Šitu laiku jau rodomas filmas {movie.movie.name}")
                                 overlap = True
@@ -474,10 +471,10 @@ def edit_schedule():
                     overlap = False
                     for movie in screening_list:
                         if movie != entry_to_edit and movie.screening_date == entry_to_edit.screening_date: #ar ne tas pats seansas kurį redaguojam ir ar seansas vyksta tą pačią dieną
-                            existing_time = datetime.combine(entry_to_edit.screening_date, movie.screening_time) #data iš redaguojamo seanso + laikas iš kito seanso
-                            new_datetime = datetime.combine(entry_to_edit.screening_date, f_edit_time) #Laikas į kurį norime pakeisti
-                            movie_duration = timedelta(minutes=entry_to_edit.movie.length)
-
+                            existing_time = datetime.combine(entry_to_edit.screening_date, movie.screening_time) #Dabartinis seanso laikas
+                            new_datetime = datetime.combine(entry_to_edit.screening_date, f_edit_time) #Naujas seanso laikas
+                            movie_duration = timedelta(minutes=entry_to_edit.movie.length) #Filmo trukmė
+                            #   senas laikas       naujas laikas    senas laikas + trukmė                                 naujas laikas     senas laikas    naujas laikas + trukmė
                             if (existing_time <= new_datetime < existing_time + timedelta(minutes=movie.movie.length) or new_datetime <= existing_time < new_datetime + movie_duration):
                                 print(f"Šiuo laiku jau rodomas filmas {movie.movie.name}")
                                 overlap = True
@@ -595,7 +592,7 @@ def show_reservations(guest_name):
             current_guest = guest
             break
 
-    if current_guest.reservations == None:
+    if current_guest.reservations == []:
         print("Šiuo metu neturite rezervacijų")
         return
     
@@ -667,8 +664,6 @@ def rate_movie(guest_name):
         if guest.name.lower() == guest_name.lower():
             current_guest = guest
             break
-   
-    show_schedule()
 
     seen_movies = []
 
@@ -683,6 +678,7 @@ def rate_movie(guest_name):
 
     if seen_movies == []:
         print("Neturite peržiūrėtų filmų, kuriuos galėtumėte vertinti")
+        return
 
     print("Jūsų peržiūrėti filmai:")
     for i, movie in enumerate (seen_movies,1):
@@ -747,7 +743,7 @@ def show_guest_ratings(guest_name):
 
 ############################################################################################################################################################################
 def guest_registration():
-    print("***Žiūrovų registracija***")
+    print("Žiūrovų registracija")
     try:
         guests = file.load_guests()
     except FileNotFoundError:
@@ -793,7 +789,7 @@ def guest_login():
                 break
 
         if guest_exists:
-            print(f"Sveiki, {guest_name}!")
+            print(f"Sveiki, {str(guest_name).title()}!")
             return (guest_name)
         else: 
             print(f"Žiūrovas {guest_name} nėra registruotas, prašome užsiregistruoti")
